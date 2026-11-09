@@ -111,6 +111,7 @@ parameter CONF_STR = {
 	"P2O9,Swap Joysticks,No,Yes;",
 	"P2OA,Multitap,Disabled,Enabled;",
 	"P2oJK,SNAC,Off,Controllers,Zapper,3D Glasses;",
+	"P2O[88],SNAC Gun,Zapper,Sega Phaser;",
 	"P2o02,Peripheral,None,Zapper(Mouse),Zapper(Joy1),Zapper(Joy2),Vaus,Vaus(A-Trigger),Powerpad,Family Trainer;",
 	"P2oL,Famicom Keyboard,No,Yes;",
 	"P2-;",
@@ -476,6 +477,22 @@ wire raw_serial = |status[52:51];
 wire extend_serial_d4 = status[52:51] == 2'b10;
 wire snac_3d_glasses = &status[52:51];
 
+// Sega Light Phaser on SNAC (SMS DB9 wiring): TL (trigger) is on USER_IN[2] and
+// TH (light) is on USER_IN[4], the opposite way round to the NES Zapper wiring.
+wire phaser_en = status[88] & extend_serial_d4;
+wire phaser_light_n;
+wire phaser_trigger;
+
+phaser_snac phaser
+(
+	.clk(clk),
+	.scanline(scanline),
+	.th_n(USER_IN[4]),
+	.tl_n(USER_IN[2]),
+	.light_n(phaser_light_n),
+	.trigger(phaser_trigger)
+);
+
 wire serial_d4 = extend_serial_d4 ? |serial_d4_sr : ~USER_IN[4];
 reg [7:0] serial_d4_sr;
 reg snac_p2 = 0;
@@ -528,7 +545,7 @@ always_comb begin
 		USER_OUT[2]  = snac_3d_glasses ? joypad_out[1] : 1'b1;
 		USER_OUT[3]  = ~joy_swap ? ~joypad_clock[0] : ~joypad_clock[1];
 		joypad1_data = {2'b0, mic, 1'b0, ~joy_swap ? joy0_d0 : ~USER_IN[5]};
-		joypad2_data = {serial_d4, snac_3d_glasses ? 1'b1 : ~USER_IN[2], 2'b00, ~joy_swap ? ~USER_IN[5] : joy1_d0};
+		joypad2_data = {phaser_en ? phaser_trigger : serial_d4, snac_3d_glasses ? 1'b1 : (phaser_en ? phaser_light_n : ~USER_IN[2]), 2'b00, ~joy_swap ? ~USER_IN[5] : joy1_d0};
 
 		// The Vs. gun replaces controller 0's serial report instead of driving
 		// the consumer Zapper D3/D4 lines on controller 1.

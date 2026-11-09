@@ -9,6 +9,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/cheatcodes.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/miracle.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/keyboard.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/zapper.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/phaser_snac.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/cart.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/video.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/composite_decoder.sv
