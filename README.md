@@ -1,3 +1,13 @@
+## Sega Light Phaser support (SNAC)
+
+Adds a Sega Master System Light Phaser option to the NES core's SNAC Zapper mode
+
+- OSD: SNAC = Zapper, then SNAC Gun = Sega Phaser
+- Use Swap Joysticks = Yes to keep your USB pad on port 1
+- Needs the SMS SNAC adapter and a CRT
+- Tested with Duck Hunt and an official Sega Light Phaser + SNAC on a Superstation One
+- Source change is in NES.sv and rtl/phaser_snac.sv
+
 # [Nintendo Entertainment System](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) for [MiSTer Platform](https://github.com/MiSTer-devel/Main_MiSTer/wiki)
 
 This is an FPGA implementation of the NES/Famicom based on [FPGANES](https://github.com/strigeus/fpganes) by Ludvig Strigeus and ported to MiSTer.
